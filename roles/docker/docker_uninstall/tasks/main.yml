@@ -1,0 +1,28 @@
+---
+    - name: Remove Stoped docker test container
+      shell: | 
+        docker rm $(docker ps -a -q);
+    - name: Remove docker test image
+      docker_container:
+        name: "my_hello_container"
+        image: "hello-world"
+        state: absent
+    - name: Stop Docker socket ! important
+      systemd:
+        name: docker.socket
+        state: stopped
+    - name: Remove Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: absent
+    - name: Echo docker_info.containers
+      debug: 
+        msg: "docker_info_containers"
+
+    - name: Uninstall Docker
+      apt:
+        name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose-plugin']
+        state: absent
+    - name: Clear with autoremove
+      apt:
+        autoremove: yes

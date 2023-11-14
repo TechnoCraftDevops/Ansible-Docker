@@ -1,0 +1,33 @@
+---
+    - name: Update & Upgrade
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: Install required system packages
+      apt:
+        name: ['ca-certificates', 'curl', 'gnupg', 'lsb-release', 'python3-docker']
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install Docker
+      apt:
+        name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose-plugin']
+        state: latest
+        update_cache: true
+
+    - name: Testing docker
+      docker_container:
+        name: "my_hello_container"
+        image: "hello-world"
+        state: present

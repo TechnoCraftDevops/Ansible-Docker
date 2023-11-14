@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+
+  roles:
+    - role: os_update_upgrade
+    - role: docker_install
